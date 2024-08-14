@@ -53,11 +53,28 @@ footerTemplate.innerHTML =  `
 
 	connectedCallback() {
 		const fontAwesome = document.querySelector('script[src*="fontawesome"]')
+		console.log(fontAwesome)
 		const shadowRoot = this.attachShadow({ mode: 'closed'})
+		/*
 		if(fontAwesome) {
 			shadowRoot.appendChild(fontAwesome.cloneNode())
+			
 		}
+		*/
+		const id = setInterval(() => {
+			//console.log('setInterval');
+			const fontAwesomeFont = document.querySelector('#fa-v5-font-face');
+			const fontAwesomeMain = document.querySelector('#fa-main');
+			if (fontAwesome && fontAwesomeFont && fontAwesomeMain) {
+			  shadowRoot.appendChild(fontAwesome.cloneNode());
+			  shadowRoot.appendChild(fontAwesomeFont.cloneNode('deep'));
+			  shadowRoot.appendChild(fontAwesomeMain.cloneNode('deep'));
+			  clearInterval(id);
+			}
+		  }, 200);
 
+		
+		console.log(shadowRoot)
 		shadowRoot.appendChild(footerTemplate.content)
 	}
 }

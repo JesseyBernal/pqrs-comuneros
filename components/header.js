@@ -12,10 +12,7 @@ headerTemplate.innerHTML = `
       font-weight: 700;
       color: #fff;
       user-select: none;
-      }  
-    imagen{
-    width: 25%;
-    }
+      }     
     .button {     
       border: none;
       cursor: pointer;
@@ -25,15 +22,13 @@ headerTemplate.innerHTML = `
       height: 30px;
       background-color: #7cca12;
       color: #fff;
-      padding: 0 20px;              
+      padding: 0 20px;  
+      transition: 0.4s;            
       }
-    .button:hover{
-      background-color: #B31268;      
-    }
-    img {
-      width: 40px;
-      
-    }
+    .button:hover{    
+      background-color: #B31268;   
+      transform: scale(1.05 , 1.05);   
+    }    
   </style>
   <header>
     <div>

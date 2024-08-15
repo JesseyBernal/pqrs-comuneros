@@ -6,26 +6,67 @@
     <title>PQRS Comuneros</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="components/header.js" type="text/javascript" defer></script>
-    <script src="components/footer.js" type="text/javascript" defer></script>
+    <script src="components/header.js" type="text/javascript" ></script>
+    <script src="components/footer.js" type="text/javascript" ></script>
     <script
       src="https://kit.fontawesome.com/dea247ef16.js"
       crossorigin="anonymous"
     ></script>
-
-    <!-- <script src='main.js'></script> -->
+    <script src='main.js'></script> 
   </head>
   <body>
     <header-component></header-component>
-    <template id="welcome-msg"><p>Hola, Mundo</p></template>
+    
     <main>
       <!-- Contenido de la pagina -->
-      <div class="contenedor">
-        <di class="caja uno">Caja 1</di>
-        <div class="caja dos">Caja 2</div>
-        <div class="caja tres">Caja 3</div>
-        <div><input type="button" class="button" value="Crear PQRS"></div>
-      </div>
+      <form class="contenedor">
+        <input type="search" placeholder="Buscar" class="buscador" />
+        <select name="estados" class="lista estados">
+          <option value="estado">Estado</option>
+          <option value="aceptado">Aceptado</option>
+          <option value="espera">Espera</option>
+          <option value="rechazado">Rechazado</option>          
+        </select>
+        <select name="categorias"  class="lista categorias">
+          <option value="categoria">Categoria</option>
+          <option value="aceptado">Peticion</option>
+          <option value="espera">Queja</option>
+          <option value="rechazado">Reclamo</option>  
+          <option value="rechazado">Sugerencia</option>          
+        </select>
+        
+        
+        <input type="submit" class="boton-formulario" value="Buscar" />
+      </form>
+
+      <div class="caja tabla">
+      <table>
+        <tr>
+          <th>Codigo</th>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Categoria</th>
+          <th>Acciones</th>
+        </tr>
+        <tr>
+          <td>2134</td>
+          <td>Alfreds Futterkiste</td>
+          <td><input type="date" class="fecha"></td>
+          <td>Activo</td>
+          <td>Solicitud</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>54534</td>
+          <td>Maria Anders</td>
+          <td><input type="date" class="fecha"></td>
+          <td>Finalizado</td>
+          <td>Queja</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
     </main>
     <footer-component></footer-component>
   </body>

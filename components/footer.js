@@ -15,8 +15,7 @@ footerTemplate.innerHTML = `
 			padding:0;
 		}
 		ul li {
-			list-style: none;
-			display: inline;
+			list-style: none;			
 		}
 		a {
 			margin: 0 15px;
@@ -26,24 +25,31 @@ footerTemplate.innerHTML = `
 		a:hover {
 			padding-bottom: 5px;
 			box-shadow: inset 0 -2px 0 0 #333;
-		}
-		.social-row {
+		}		
+		
+		.social-row {				
 			font-size: 20px;
+		}
+		.social-row li{
+			display: inline;
 		}
 		.social-row li a {
 			margin: 0 15px;
 		}
+		.derechos-autor{
+		font-size: 14px;
+		color: #767575;
+		}
+		img {
+      		width: 40px;      
+    	}
 	</style>
 	<footer>
-		<ul>
-			<li><a href="about.html">About</a></li>
-			<li><a href="work.html">Work</a></li>
-			<li><a href="contact.html">Contact</a></li>
-		</ul>
+		<div class="imagen"><img src="images/logo-comuneros.png" alt="Logo-Comuneros"></div>
+		<div class="derechos-autor">© 2024 C.C. Comuneros</div>
 		<ul class="social-row">
-			<li><a href="https://github.com/my-github-profile"><i class="fab fa-github"></i></a></li>
-			<li><a href="https://twitter.com/my-twitter-profile"><i class="fab fa-twitter"></i></a></li>
-			<li><a href="https://www.linkedin.com/in/my-linkedin-profile"><i class="fab fa-linkedin"></i></a></li>
+			<li><a href="https://web.facebook.com/LosComunerosOficial/?_rdc=1&_rdr"><i class="fab fa-facebook"></i></a></li>
+			<li><a href=""><i class="fab fa-instagram"></i></a></li>			
 		</ul>
 	</footer>
 	`;

@@ -1,53 +1,59 @@
-const headerTemplate = document.createElement('template')
+const headerTemplate = document.createElement("template");
 
-headerTemplate.innerHTML= `
-	<style>		
-        nav {
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color:  #0a0a23;
-        }
-
-        ul {
-          padding: 0;
-          list-style-type: none;
-          display: flex;
-        }
-
-        a {
-          font-weight: 700;
-          margin: 0 25px;
-          color: #fff;
-          text-decoration: none;
-        }
-
-        a:hover {
-          padding-bottom: 5px;
-          box-shadow: inset 0 -2px 0 0 #fff;
-        }
-    </style>
-    <header>
-        <nav>
-          <ul>
-            <li><a href="about.html">About</a></li>
-            <li><a href="work.html">Work</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </nav>
-    </header>
-	`
+headerTemplate.innerHTML = `
+	<style>  
+    div {
+      height: 60px;
+      padding: 0 10px;      
+      display: flex;
+      align-items: center;
+      justify-content: space-between;      
+      background-color:  #294076;
+      font-weight: 700;
+      color: #fff;
+      user-select: none;
+      }  
+    imagen{
+    width: 25%;
+    }
+    .button {     
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 4px;
+      font-size: 13px;
+      height: 30px;
+      background-color: #7cca12;
+      color: #fff;
+      padding: 0 20px;              
+      }
+    .button:hover{
+      background-color: #B31268;      
+    }
+    img {
+      width: 40px;
+      
+    }
+  </style>
+  <header>
+    <div>
+      <div class="imagen"><!--<img src="images/logo-comuneros.png" alt="Logo-Comuneros">--></div>
+      <div>PQRS Comuneros</div>
+      <div><input type="button" class="button" value="Crear PQRS"></div>
+    
+    </div>
+  </header>
+	`;
 
 class Header extends HTMLElement {
-	constructor() {
-		super()
-	}
+  constructor() {
+    super();
+  }
 
-	connectedCallback() {	
-		const shadowRoot = this.attachShadow({ mode: 'closed'})		
-		shadowRoot.appendChild(headerTemplate.content)
-	}
+  connectedCallback() {
+    const shadowRoot = this.attachShadow({ mode: "closed" });
+    shadowRoot.appendChild(headerTemplate.content);
+  }
 }
 
-customElements.define('header-component', Header)
+customElements.define("header-component", Header);

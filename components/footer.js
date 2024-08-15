@@ -1,6 +1,6 @@
-const footerTemplate = document.createElement('template')
+const footerTemplate = document.createElement("template");
 
-footerTemplate.innerHTML =  `
+footerTemplate.innerHTML = `
 	<style>
 		footer {
 			height: 60px;
@@ -10,6 +10,9 @@ footerTemplate.innerHTML =  `
 			justify-content: space-between;
 			align-items: center;
 			background-color: #dfdfe2;
+		}
+		ul{		
+			padding:0;
 		}
 		ul li {
 			list-style: none;
@@ -43,40 +46,38 @@ footerTemplate.innerHTML =  `
 			<li><a href="https://www.linkedin.com/in/my-linkedin-profile"><i class="fab fa-linkedin"></i></a></li>
 		</ul>
 	</footer>
-	`
-	
+	`;
 
-	class Footer extends HTMLElement {
-	constructor() {
-		super()
-	}
+class Footer extends HTMLElement {
+  constructor() {
+    super();
+  }
 
-	connectedCallback() {
-		const fontAwesome = document.querySelector('script[src*="fontawesome"]')
-		console.log(fontAwesome)
-		const shadowRoot = this.attachShadow({ mode: 'closed'})
-		/*
+  connectedCallback() {
+    const fontAwesome = document.querySelector('script[src*="fontawesome"]');
+    console.log(fontAwesome);
+    const shadowRoot = this.attachShadow({ mode: "closed" });
+    /*
 		if(fontAwesome) {
 			shadowRoot.appendChild(fontAwesome.cloneNode())
 			
 		}
 		*/
-		const id = setInterval(() => {
-			//console.log('setInterval');
-			const fontAwesomeFont = document.querySelector('#fa-v5-font-face');
-			const fontAwesomeMain = document.querySelector('#fa-main');
-			if (fontAwesome && fontAwesomeFont && fontAwesomeMain) {
-			  shadowRoot.appendChild(fontAwesome.cloneNode());
-			  shadowRoot.appendChild(fontAwesomeFont.cloneNode('deep'));
-			  shadowRoot.appendChild(fontAwesomeMain.cloneNode('deep'));
-			  clearInterval(id);
-			}
-		  }, 200);
+    const id = setInterval(() => {
+      //console.log('setInterval');
+      const fontAwesomeFont = document.querySelector("#fa-v5-font-face");
+      const fontAwesomeMain = document.querySelector("#fa-main");
+      if (fontAwesome && fontAwesomeFont && fontAwesomeMain) {
+        shadowRoot.appendChild(fontAwesome.cloneNode());
+        shadowRoot.appendChild(fontAwesomeFont.cloneNode("deep"));
+        shadowRoot.appendChild(fontAwesomeMain.cloneNode("deep"));
+        clearInterval(id);
+      }
+    }, 200);
 
-		
-		console.log(shadowRoot)
-		shadowRoot.appendChild(footerTemplate.content)
-	}
+    console.log(shadowRoot);
+    shadowRoot.appendChild(footerTemplate.content);
+  }
 }
 
-customElements.define('footer-component', Footer)
+customElements.define("footer-component", Footer);

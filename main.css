@@ -23,7 +23,7 @@
 	
 	
   }
-.contenedor {
+.contenedor-formulario {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -43,7 +43,7 @@
 	border: 3px solid #7cca12;
 }
 
-.buscador{
+.buscador-formulario{
 	height: 30px;
 	padding: 10px;
 	width: 100%;
@@ -61,7 +61,7 @@ input::-webkit-search-cancel-button {
 	*/
    }
 
-.buscador:focus{
+.buscador-formulario:focus{
 	outline: 0;
 	border: 3px solid #7cca12;
 }
@@ -91,15 +91,70 @@ table {
   
   td, th {
 	border: 1px solid #484747;
-	text-align: left;
+	text-align: center;
 	padding: 8px;
-  }
-
-  
+  }  
 
   tr:nth-child(even) {
 	background-color: #dddddd;
   }
+  
+.col-1, .col-6, .col-4, .col-5{
+	width: 0% ;
+	
+}
+
+.codigo-tabla{
+	text-decoration: none;
+	margin: 0 15px;
+	font-weight: 700;
+	color: #294076;
+}
+
+.codigo-tabla:hover{
+	color: #7cca12;
+}
+
+a:visited{
+	color: none;
+}
+
+.social-row {				
+	font-size: 20px;
+}
+.social-row li{
+	display: inline;
+}
+.social-row li a {
+	margin: 0 5px;
+}
+
+.fa-solid{
+	transition: 0.4s; 
+}
+
+.fa-square-plus{
+	color: #7cca12;
+}
+
+.fa-trash{
+	color: #B31268;
+}
+
+.fa-solid:hover{        
+    transform: scale(1.25 , 1.25);  
+}
+
+.fa-square-plus:hover{
+	color: #7dca12c9;
+}
+
+.fa-trash:hover{
+	color: #b31268ce;
+}
+      
+
+
 .caja {	
 	margin: 4px;
 	padding: 4px;

@@ -1,0 +1,20 @@
+{
+  "name": "repositorio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon /src/index.js"
+  },
+  "author": "Jessey Jack Kirlk Johannes Bernal Diaz",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

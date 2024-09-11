@@ -8,13 +8,14 @@
                 <div class="card-body">
                     <form action="/add" method="post">
                     <div class="input-group mt-2">
-                        <label for="" class="input-group-text">Radicado</label>
-                        <input class="form-control" type="text" name="id_pqrsd" id="id_pqrsd" placeholder="# Radicado" autofocus required>
+                        <label for="id_pqrsd" class="input-group-text">Radicado</label>
+                        <input class="form-control" type="number" name="id_pqrsd" id="id_pqrsd" placeholder="# Radicado" autofocus required>
                     </div>
                     <div class="input-group mt-2">
-                        <label for="id_usuario" class="input-group-text">Usuario</label>
-                        <input class="form-control" type="text" name="id_usuario" id="id_usuario" placeholder="Seleccionar usuario" required>
-                    </div>
+                        <label for="id_local" class="input-group-text">Local</label>
+                        <input class="form-control" type="number" name="id_local" id="id_local" placeholder="Escribir Local" required>
+                    </div>                                            
+                 
                     <div class="input-group mt-2">
                         <label for="id_categoria" class="input-group-text">Categoria</label>
                         <!--<input class="form-control" type="text" name="id_categoria" id="id_categoria" placeholder="Seleccionar categoria" required>-->
@@ -34,14 +35,24 @@
                             <option value="{{id_estado}}">{{nombre_estado}}</option>
                             {{/each}}
                         </select>
+                    </div>              
+                 
+                    <div class="input-group mt-2">
+                        <label for="asunto" class="input-group-text">Asunto</label>
+                        <input class="form-control" type="text" name="asunto" id="asunto" placeholder="Contendio del pqrsd" required>
                     </div>
                     <div class="input-group mt-2">
                         <label for="fecha" class="input-group-text">Fecha</label>
                         <input class="form-control" type="date" name="fecha" id="fecha" required>
                     </div>
                     <div class="input-group mt-2">
-                        <label for="asunto" class="input-group-text">Asunto</label>
-                        <input class="form-control" type="text" name="asunto" id="asunto" placeholder="Contendio del pqrsd" required>
+                        <label for="id_administrador" class="input-group-text">Creador Por</label>                        
+                        <select class="form-select" aria-label="Default select example"  name="id_administrador" required>
+                            <option selected value="">Seleccionar administrador</option>
+                            {{#each seleccionAdministrador}}
+                            <option value="{{id_administrador}}">{{nombre_administrador}}</option>
+                            {{/each}}
+                        </select>
                     </div>
                     <div class="form-group mt-4 d-grid gap-2">
                         <button class="btn btn-success">Crear PQRSD</button>

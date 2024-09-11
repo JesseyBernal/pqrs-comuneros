@@ -2,15 +2,17 @@
   <div class="row mt-5">
     <h3 class="text-center text-uppercase p-2">Lista de PQRSD</h3>
     {{#if personas}}      
-        <table class="table text-center">
+        <table class="table text-center table-striped">
           <thead>
             <tr class="table-dark">
-              <td scope="col" class="col-2">Radicado</td>
+              <td scope="col">Radicado</td>
+              <td scope="col">Local</td>
               <td scope="col">Nombre</td>
               <td scope="col">Categoria</td>
-              <td scope="col">Estado</td>
-              <td scope="col">Fecha</td>
+              <td scope="col">Estado</td>              
               <td scope="col">Asunto</td>
+              <td scope="col">Fecha</td>
+              <td scope="col">Creado Por</td>              
               <td scope="col">Acciones</td>
             </tr>
           </thead>
@@ -18,11 +20,13 @@
             {{#each personas}}
               <tr>
                 <td>{{id_pqrsd}}</td>
+                <td>{{local}}</td>
                 <td>{{nombre_usuario}}</td>
                 <td>{{nombre_categoria}}</td>
-                <td>{{nombre_estado}}</td>
-                <td>{{fecha}}</td>
+                <td>{{nombre_estado}}</td>                
                 <td>{{asunto}}</td>
+                <td>{{fecha}}</td>
+                <td>{{nombre_administrador}}</td>                
                 <td>
                   <div class="btn-group">
                     <a href="/edit/{{id_pqrsd}}" class="btn btn-warning p-2">
@@ -32,15 +36,17 @@
                   </div>
                 </td>
               </tr>
-            {{/each}}
+            {{/each}}            
           </tbody>
           <tfoot>
             <tr class="table-dark">
-              <td colspan="7">REGISTRO DE PQRSD</td>
+              <td colspan="9">REGISTRO DE PQRSD</td>
             </tr>
-          </tfoot>
-        </table>
+          </tfoot>          
+          <small class="form-text text-muted" >Cantidad de PQRSD pendientes: {{contarPendiente.pendiente}} Cantidad de PQRSD en espera: {{contarEspera.espera}}</small>          
+        </table>        
     </div>
+    {{>pagination}}
     {{else}}
       <div class="card text-center mx-auto" style="width: 350px;">
         <div class="card-header">

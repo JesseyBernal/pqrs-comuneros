@@ -39,7 +39,6 @@ router.get('/add', async(req,res) =>{
     const [categoria] = await pool.query('SELECT id_categoria, nombre_categoria FROM categorias;');
     const [estado] = await pool.query('SELECT id_estado, nombre_estado FROM estados;');
     const [administrador] = await pool.query('SELECT id_administrador, nombre_administrador FROM administradores;');
-    //await pool.query('SELECT id_categoria, nombre_categoria FROM categorias;')
     res.render('personas/add', {seleccionCategoria: categoria, seleccionEstado: estado, seleccionAdministrador: administrador});
     
 })
@@ -56,6 +55,27 @@ router.post('/add', async(req,res) => {
         
 
     }catch(err){
+        res.status(500).json({message:err.message});
+    }
+})
+
+router.get('/details/:id' , async(req,res) =>{
+    try {
+        const {id} = req.params;
+
+        const [persona] = await pool.query('SELECT id_local as local, nombre_usuario, telefono_usuario, correo_usuario, nombre_estado, nombre_local, descripcion_local FROM locales INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN estados_locales ON locales.id_estado_local = estados_locales.id_estado_local WHERE id_local = ?;', [id]);
+        const personaEdit = persona[0];
+
+        const [result] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado WHERE pqrsds.id_local = ?;', [id]);
+
+        const [contarPendiente] = await pool.query('SELECT COUNT(*) AS pendiente FROM pqrsds WHERE id_estado = 2 AND id_local = ?;', [id])
+        const [contarEspera] = await pool.query('SELECT COUNT(*) AS espera FROM pqrsds WHERE id_estado = 3 AND id_local = ?;', [id])
+        const cPendiente = contarPendiente[0];
+        const cEspera = contarEspera[0];        
+
+        res.render('personas/details', {persona: personaEdit, personas: result, contarPendiente: cPendiente, contarEspera: cEspera});
+
+    } catch (err) {
         res.status(500).json({message:err.message});
     }
 })

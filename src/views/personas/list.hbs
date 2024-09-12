@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row mt-5">
-    <h3 class="text-center text-uppercase p-2">Lista de PQRSD</h3>
+    <h3 class="text-center  text-uppercase p-2">Lista de PQRSD</h3>
     {{#if personas}}      
-        <table class="table text-center table-striped">
+        <table class="table text-center align-middle table-striped">
           <thead>
             <tr class="table-dark">
               <td scope="col">Radicado</td>
@@ -12,7 +12,7 @@
               <td scope="col">Estado</td>              
               <td scope="col">Asunto</td>
               <td scope="col">Fecha</td>
-              <td scope="col">Creado Por</td>              
+              <td scope="col">Registrado</td>              
               <td scope="col">Acciones</td>
             </tr>
           </thead>
@@ -20,7 +20,7 @@
             {{#each personas}}
               <tr>
                 <td>{{id_pqrsd}}</td>
-                <td>{{local}}</td>
+                <td><a href="/details/{{local}}">{{local}}</a></td>
                 <td>{{nombre_usuario}}</td>
                 <td>{{nombre_categoria}}</td>
                 <td>{{nombre_estado}}</td>                
@@ -58,6 +58,5 @@
           <a href="/add" class="btn btn-primary">Ir a crear</a>
         </div>   
         </div>   
-    {{/if}}
-  
+    {{/if}}  
 </div>

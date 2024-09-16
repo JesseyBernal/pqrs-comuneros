@@ -17,7 +17,6 @@
                     </div>                        
                     <div class="input-group mt-2">
                         <label for="id_categoria" class="input-group-text">Categoria</label>
-                        <!--<input class="form-control" type="text" name="id_categoria" id="id_categoria" placeholder="Seleccionar categoria" required>-->
                         <select class="form-select" aria-label="Default select example"  name="id_categoria" required>
                             <option selected hidden value="{{persona.id_categoria}}">{{persona.nombre_categoria}}</option>
                             {{#each seleccionCategoria}}
@@ -27,7 +26,6 @@
                     </div>
                     <div class="input-group mt-2">
                         <label for="id_estado" class="input-group-text">Estado</label>
-                        <!--<input class="form-control" type="text" name="id_estado" id="id_estado" placeholder="Seleccionar estado" required>-->
                         <select class="form-select" aria-label="Default select example"  name="id_estado" required>
                             <option selected hidden value="{{persona.id_estado}}">{{persona.nombre_estado}}</option>
                             {{#each seleccionEstado}}
@@ -37,7 +35,7 @@
                     </div>
                     <div class="input-group mt-2">
                         <label for="asunto" class="input-group-text">Asunto</label>
-                        <input class="form-control" type="text" name="asunto" id="asunto" placeholder="Contendio del pqrsd" value="{{persona.asunto}}" required>
+                        <textarea class="form-control" type="text" name="asunto" id="asunto" placeholder="Contendio del pqrsd" value="{{persona.asunto}}" required>{{persona.asunto}}</textarea>
                     </div>
                     <div class="input-group mt-2">
                         <label for="fecha" class="input-group-text">Fecha</label>
@@ -45,7 +43,6 @@
                     </div>
                     <div class="input-group mt-2">
                         <label for="id_administrador" class="input-group-text">Creado Por</label>
-                        <!--<input class="form-control" type="text" name="id_estado" id="id_estado" placeholder="Seleccionar estado" required>-->
                         <select class="form-select" aria-label="Default select example"  name="id_administrador" required>
                             <option selected hidden value="{{persona.id_administrador}}">{{persona.nombre_administrador}}</option>
                             {{#each seleccionAdministrador}}

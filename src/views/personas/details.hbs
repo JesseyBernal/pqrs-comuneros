@@ -35,8 +35,12 @@
 </div>
 <div class="container">
   <div class="row">
-    <h3 class="text-center  text-uppercase p-4">Lista de PQRSD</h3>       
-        <table class="table text-center align-middle table-striped">
+    <div class="card text-center mt-4 p-0">
+      <div class="card-header">
+        <h3 class="text-center  text-uppercase p-2">Lista de PQRSD</h3>
+      </div>      
+      <div class="card-body">
+        <table class="table text-center align-middle table-striped rounded-3 overflow-hidden">
           <thead>
             <tr class="table-dark">
               <td scope="col">Radicado</td>
@@ -74,6 +78,9 @@
             </tr>
           </tfoot>          
           <small class="form-text text-muted" >Cantidad de PQRSD pendientes: {{contarPendiente.pendiente}} Cantidad de PQRSD en espera: {{contarEspera.espera}}</small>          
-        </table>        
+        </table>     
+      </div>
+    </div>
+           
     </div> 
 </div>

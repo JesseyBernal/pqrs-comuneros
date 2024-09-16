@@ -16,6 +16,25 @@ router.get('/list', async(req,res) =>{
         res.status(500).json({message:err.message});
     }
 })
+
+router.get('/list/search/:id', async(req,res) => {
+    try {
+        const {id} = req.params;
+        
+
+        const [result] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado WHERE pqrsds.id_local = ?;', [id]);
+
+        const [contarPendiente] = await pool.query('SELECT COUNT(*) AS pendiente FROM pqrsds WHERE id_estado = 2 AND id_local = ?;', [id])
+        const [contarEspera] = await pool.query('SELECT COUNT(*) AS espera FROM pqrsds WHERE id_estado = 3 AND id_local = ?;', [id])
+        const cPendiente = contarPendiente[0];
+        const cEspera = contarEspera[0];        
+
+        res.render('personas/search', {personas: result, contarPendiente: cPendiente, contarEspera: cEspera});
+    } catch (error) {
+        res.status(500).json({message:error.message});
+        
+    }
+})
   
 
 router.get('/list/page', async(req, res) => {

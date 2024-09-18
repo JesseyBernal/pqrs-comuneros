@@ -1,14 +1,23 @@
-<div class="container">
-  <div class="row">
-    <div class="card text-center mt-4 p-0">
-      <div class="card-header">
-        <h3 class="text-center  text-uppercase p-2">Lista de PQRSD</h3>
-      </div>      
-      <div class="card-body">
+<div class="container p-0">
+  <div class="row mt-2">
+    <h3 class="text-center text-uppercase p-2">Lista de PQRSD</h3>   
+    <form action="/list-search" method="post">
+      <div class="input-group mb-2">
+        <input type="number" class="form-control" placeholder="Local..." id="search" name="search" style="-webkit-appearance: none;" required/>
+        <div class="input-group-btn">
+          <button class="btn btn-outline-success" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+    {{#if personas}}      
         <table class="table text-center align-middle table-striped rounded-3 overflow-hidden">
           <thead>
             <tr class="table-dark">
               <td scope="col">Radicado</td>
+              <td scope="col">Local</td>
+              <td scope="col">Nombre</td>
               <td scope="col">Categoria</td>
               <td scope="col">Estado</td>              
               <td scope="col">Asunto</td>
@@ -18,10 +27,11 @@
             </tr>
           </thead>
           <tbody>
-            
             {{#each personas}}
               <tr>
-                <td>{{id_pqrsd}}</td>            
+                <td>{{id_pqrsd}}</td>
+                <td><a href="/details/{{local}}">{{local}}</a></td>
+                <td>{{nombre_usuario}}</td>
                 <td>{{nombre_categoria}}</td>
                 <td>{{nombre_estado}}</td>                
                 <td>{{asunto}}</td>
@@ -40,13 +50,23 @@
           </tbody>
           <tfoot>
             <tr class="table-dark">
-              <td colspan="7">LISTA DE PQRSD</td>
+              <td colspan="9">REGISTRO DE PQRSD</td>
             </tr>
           </tfoot>          
-          <small class="form-text text-muted" >Cantidad de PQRSD pendientes: {{contarPendiente.pendiente}} Cantidad de PQRSD en espera: {{contarEspera.espera}}</small>          
-        </table>     
-      </div>
+          <h3 class="form-text text-muted" >Cantidad de PQRSD pendientes: <a href="/list-search/cat/:id/{{rTotal.local}}">{{contarPendiente.pendiente}} </a> Cantidad de PQRSD en espera: <a href="/list-search/cat/:id/{{rTotal.local}} ">{{contarEspera.espera}}</a> </h3>          
+        </table>        
     </div>
-           
-    </div> 
+    {{>pagination}}
+    {{else}}
+      <div class="card text-center mx-auto p-0" style="width: 350px;">
+        <div class="card-header">
+          <h3>No se encontraron resultados para la busqueda de {{search}}</h3>
+        </div>
+        <div class="card-body">
+          <p>Presiona este boton para que puedas registrar un PQRSD en la
+            pagina</p>
+          <a href="/add" class="btn btn-primary">Crear</a>
+        </div>   
+        </div>   
+    {{/if}}  
 </div>

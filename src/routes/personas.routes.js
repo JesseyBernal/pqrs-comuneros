@@ -67,6 +67,24 @@ router.get('/list-page', async(req, res) => {
         const cPendiente = contarPendiente[0];
         const cEspera = contarEspera[0];
 
+        const {page, limit} = req.query
+        const offset = (page - 1) * limit
+        const [data] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado ORDER BY fecha DESC limit ? offset ?', [+limit, +offset])
+        const [totalPageData] = await pool.query ('SELECT COUNT(*) AS count FROM pqrsds')
+        const totalPage = Math.ceil(+totalPageData[0]?.count / limit)
+
+        console.log(totalPage)
+        /*
+        res.json({
+            data: data,
+            pagination: {
+                page: +page,
+                limit: +limit,
+                totalPage
+            }
+        })
+        */
+        /*
         const page = req.query.page
         const limit = req.query.limit
 
@@ -75,7 +93,8 @@ router.get('/list-page', async(req, res) => {
         
         const resultUsers = users.slice(starIndex, endIndex)
         console.log(resultUsers)
-        res.render('personas/list', {personas: resultUsers, contarPendiente: cPendiente, contarEspera: cEspera})
+        */
+        res.render('personas/list', {personas: data, contarPendiente: cPendiente, contarEspera: cEspera})
    
 })
 

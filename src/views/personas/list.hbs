@@ -1,10 +1,9 @@
 <div class="container p-0">
   <div class="row mt-2">
     <h3 class="text-center text-uppercase p-2">Lista de PQRSD</h3>   
-
     <form action="/list-search" method="post">
       <div class="input-group mb-2">
-        <input type="text" class="form-control" placeholder="Local..." id="search" name="search"/>
+        <input type="number" class="form-control" placeholder="Local..." id="search" name="search" required/>
         <div class="input-group-btn">
           <button class="btn btn-outline-success" type="submit">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -12,8 +11,7 @@
         </div>
       </div>
     </form>
-
-    {{#if personas}}      
+    {{#if personas}}   
         <table class="table text-center align-middle table-striped rounded-3 overflow-hidden">
           <thead>
             <tr class="table-dark">
@@ -37,7 +35,11 @@
                 <td>{{nombre_categoria}}</td>
                 <td>{{nombre_estado}}</td>                
                 <td>{{asunto}}</td>
-                <td>{{fecha}}</td>
+                {{#when Difference_In_Days 'gt' 20 }}
+                <td style="background-color: bisque;">{{fecha}}</td>
+                {{else}}
+                <td style="background-color: aqua;">{{fecha}}</td>
+                {{/when}}
                 <td>{{nombre_administrador}}</td>                
                 <td>
                   <div class="btn-group">
@@ -46,7 +48,7 @@
                     <a href="/delete/{{id_pqrsd}}" class="btn btn-danger p-2">
                     <i class="fa-solid fa-trash"></i></a>
                   </div>
-                </td>
+                </td>                
               </tr>
             {{/each}}            
           </tbody>
@@ -55,7 +57,7 @@
               <td colspan="9">REGISTRO DE PQRSD</td>
             </tr>
           </tfoot>          
-          <h3 class="form-text text-muted" >Cantidad de PQRSD pendientes: <a href="/list-cat/2 ">{{contarPendiente.pendiente}} </a> Cantidad de PQRSD en espera: <a href="/list-cat/3 ">{{contarEspera.espera}}</a> </h3>          
+          <h6 class="text-muted">Cantidad de PQRSD pendientes: <a href="/list-cat/2 ">{{contarPendiente.pendiente}} </a> Cantidad de PQRSD en espera: <a href="/list-cat/3 ">{{contarEspera.espera}}</a> </h6>          
         </table>        
     </div>
     {{>pagination}}

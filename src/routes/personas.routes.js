@@ -11,25 +11,46 @@ router.get('/list', async(req,res) =>{
         const [contarPendiente] = await pool.query('SELECT COUNT(*) AS pendiente FROM pqrsds WHERE id_estado = 2;')
         const [contarEspera] = await pool.query('SELECT COUNT(*) AS espera FROM pqrsds WHERE id_estado = 3;')
         const cPendiente = contarPendiente[0];
-        const cEspera = contarEspera[0]; 
-
+        const cEspera = contarEspera[0];        
         
-        const resultTotal1 = resultTotal.map((persona) => {
-        //Fechas
-        const time = persona.fecha;
-        const actTime = new Date();
-        //FormatoFechas
-        const formattedDate = `${actTime.getFullYear()}-${actTime.getMonth() + 1}-${actTime.getDate()}`;
-        const days = Date.parse(formattedDate) - Date.parse(time)
-        const Difference_In_Days = Math.round (days / (1000 * 3600 * 24));
-            // console.log(persona)
-            return {...persona, Difference_In_Days}
-        } ) 
 
-        res.render('personas/list', {personas: resultTotal1, contarPendiente: cPendiente, contarEspera: cEspera })
+        res.render('personas/list', {personas: resultTotal, contarPendiente: cPendiente, contarEspera: cEspera })
     }catch(err){
         res.status(500).json({message:err.message});
         
+
+    }
+})
+
+router.get('/notify', async(req,res) =>{
+    try {
+
+        const [resultTotal] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado WHERE pqrsds.id_estado = 2 ORDER BY fecha DESC;');
+
+        const resultTotal1 = resultTotal.map((persona) => {
+            //Fechas
+            const time = new Date(persona.fecha);
+            const actTime = new Date();
+            //FormatoFechas
+            const formattedDate = `${actTime.getFullYear()}-${actTime.getMonth() + 1}-${actTime.getDate()}`;
+            const days = Date.parse(formattedDate) - Date.parse(time)
+            const Difference_In_Days = Math.round (days / (1000 * 3600 * 24));
+            // Numero de semanas
+            var diff =(time.getTime() - actTime.getTime()) / 1000;
+            diff /= (60 * 60 * 24 * 7);
+            const weekdends = Math.abs(Math.round(diff));
+            // Restar fines de semana
+            var workDays = Difference_In_Days - (weekdends*2) 
+            var resDays = 15 - workDays
+            var solDays = 10 - workDays
+
+                return {...persona, workDays, resDays, solDays}
+            } ) 
+
+            res.render('personas/pending', {personas: resultTotal1 })
+
+    } catch (err) {
+        res.status(500).json({message:err.message});
 
     }
 })

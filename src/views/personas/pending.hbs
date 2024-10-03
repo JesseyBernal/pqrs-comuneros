@@ -1,17 +1,8 @@
 <div class="container p-0">
   <div class="row mt-2">
     {{#if personas}}  
-    {{#when contarPendiente.pendiente 'plus' 1}}
-    <div class="position-relative">
-      <div class="position-absolute top-0 end-0">
-        <a href="/notify" class="btn btn-primary stretched-link" style="color: rgb(240, 240, 240);">Penidientes</a> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"> {{contarPendiente.pendiente}} <span class="visually-hidden">Sin resolver</span></span> {{!-- <button type="button" class="btn btn-info position-relative"> --}} 
-        {{!-- </button> --}}
-      </div>
-    </div>
-    {{/when}}
-
-    <h3 class="text-center text-uppercase p-2">Lista de PQRSD</h3>
-    <form action="/list-search" method="post">
+    <h3 class="text-center text-uppercase p-2">PQRSD pendientes</h3>
+    {{!-- <form action="/list-search" method="post">
       <div class="input-group mb-2">
         <input type="number" class="form-control" placeholder="Local..." id="search" name="search" required/>
         <div class="input-group-btn">
@@ -20,8 +11,8 @@
           </button>
         </div>
       </div>
-    </form>
-    {{/if }}
+    </form> --}}
+    {{/if}}
     {{#if personas}}   
         <table class="table text-center align-middle table-striped rounded-3 overflow-hidden">
           <thead>
@@ -30,7 +21,7 @@
               <td scope="col">Local</td>
               <td scope="col">Nombre</td>
               <td scope="col">Categoria</td>
-              <td scope="col">Estado</td>              
+              <td scope="col">Dias restantes</td>              
               <td scope="col">Asunto</td>
               <td scope="col">Fecha</td>
               <td scope="col">Registrado</td>              
@@ -44,16 +35,20 @@
                 <td><a href="/details/{{local}}">{{local}}</a></td>
                 <td>{{nombre_usuario}}</td>
                 <td>{{nombre_categoria}}</td>
-                <td>{{nombre_estado}}</td>                
+                {{#when nombre_categoria 'noteq' "Solicitud"}}
+                <td>{{resDays}}</td>
+                {{else}}
+                <td>{{solDays}}</td>
+                {{/when}}
                 <td>{{asunto}}</td>
                 <td>{{fecha}}</td>
-                <td>{{nombre_administrador}}</td>                
+                <td>{{nombre_administrador}}</td>      
                 <td>
                   <div class="btn-group">
                     <a href="/edit/{{id_pqrsd}}" class="btn btn-warning p-2">
                     <i class="fa-solid fa-pencil"></i></a>
-                    <a href="/delete/{{id_pqrsd}}" class="btn btn-danger p-2">
-                    <i class="fa-solid fa-trash"></i></a>
+                    {{!-- <a href="/delete/{{id_pqrsd}}" class="btn btn-danger p-2">
+                    <i class="fa-solid fa-trash"></i></a> --}}
                   </div>
                 </td>                
               </tr>
@@ -61,26 +56,18 @@
           </tbody>
           <tfoot>
             <tr class="table-dark">
-              <td colspan="9">REGISTRO DE PQRSD</td>
+              <td colspan="9">PQRSD PENDIENTES</td>
             </tr>
-          </tfoot>    
-          <div class="d-flex justify-content-between">
-            <div class="d-flex align-items-center">
-              <h6 class="text-muted m-0">Cantidad de PQRSD pendientes: <a href="/list-cat/2 ">{{contarPendiente.pendiente}} </a> Cantidad de PQRSD en espera: <a href="/list-cat/3 ">{{contarEspera.espera}}</a> </h6>  
-            </div>
-            <div class="d-flex align-items-center">
-              {{>pagination}}        
-            </div>
-          </div>      
         </table>        
     </div>
+    {{!-- {{>pagination}} --}}
     {{else}}
       <div class="card text-center mx-auto p-0 " style="width: 350px;">
         <div class="card-header">
-          <h3>Ups!<p>No hay más PQRSD </p> </h3>
+          <h3>Ups!<p>No hay más PQRSD pendientes </p> </h3>
         </div>
         <div class="card-body">
-          <p>Crea un PQRSD haciendo click en el botón</p>
+          <p>Crea un PQRSD pendiente haciendo click en el botón</p>
           <a href="/add" class="btn btn-primary">Crear</a>
         </div>   
         </div>   

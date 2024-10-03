@@ -9,11 +9,11 @@
                     <form action="/edit/{{persona.id_pqrsd}}" method="post">
                     <div class="input-group mt-2">
                         <label for="" class="input-group-text">Radicado</label>
-                        <input class="form-control" type="number" name="id_pqrsd" id="id_pqrsd" placeholder="# Radicado" value="{{persona.id_pqrsd}}" required>
+                        <input class="form-control" type="number" name="id_pqrsd" id="id_pqrsd" placeholder="# Radicado" value="{{persona.id_pqrsd}}" required disabled>
                     </div>
                     <div class="input-group mt-2">
                         <label for="id_local" class="input-group-text">Local</label>
-                        <input class="form-control" type="number" name="id_local" id="id_local" placeholder="Escribir Local" value="{{persona.id_local}}" required>
+                        <input class="form-control" type="number" name="id_local" id="id_local" placeholder="Escribir Local" value="{{persona.id_local}}" required >
                     </div>                        
                     <div class="input-group mt-2">
                         <label for="id_categoria" class="input-group-text">Categoria</label>
@@ -39,7 +39,7 @@
                     </div>
                     <div class="input-group mt-2">
                         <label for="fecha" class="input-group-text">Fecha</label>
-                        <input class="form-control" type="date" name="fecha" id="fecha"  value="{{persona.fecha}}" required>
+                        <input class="form-control" type="date" name="fecha" id="fecha"  value="{{persona.fecha}}" required disabled>
                     </div>
                     <div class="input-group mt-2">
                         <label for="id_administrador" class="input-group-text">Creado Por</label>

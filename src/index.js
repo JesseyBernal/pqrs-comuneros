@@ -19,7 +19,8 @@ app.engine('.hbs', engine({
             var operators = {
             'eq': function(l,r) { return l == r; },
             'noteq': function(l,r) { return l != r; },
-            'gt': function(l,r) { return Number(l) > Number(r); },
+            'plus': function(l,r) { return Number(l) >= Number(r); },
+            'minus': function(l,r) { return Number(l) <= Number(r); },
             'or': function(l,r) { return l || r; },
             'and': function(l,r) { return l && r; },
             '%': function(l,r) { return (l % r) === 0; }

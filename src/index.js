@@ -5,7 +5,6 @@ import morgan from 'morgan';
 import {join, dirname} from 'path';
 import { fileURLToPath } from 'url';
 import personasRoutes from './routes/personas.routes.js';
-import {body , validationResult} from 'express-validator';
 
 // import myconnection from 'express-myconnection';
 import session from 'express-session';

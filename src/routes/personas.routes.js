@@ -4,7 +4,6 @@ import { format } from "mysql2";
 import {/* auth *//* login, */ register, /* storeUser */} from "../controllers/LoginController.js";
 import bcrypt from 'bcrypt'
 import { isAuthenticated } from "../helpers/auth.js";
-import {body , validationResult} from 'express-validator';
 
 const router = Router();
 
@@ -125,7 +124,7 @@ router.get('/notify', isAuthenticated, async(req,res) =>{
     }
 })
 
-router.post('/list-search', isAuthenticated, [body('search', 'Ingrese una busqueda valida').exists().isNumeric().isLength({ max: 4 })] , async(req, res) => {
+router.post('/list-search', isAuthenticated, async(req, res) => {
     try {
 
         const search = req.body.search       

@@ -8,18 +8,30 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav" style="margin-left: auto;">
-        <li class="nav-item">
-          <a class="nav-link link-light"  href="/">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link link-light" href="/add">Crear</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link link-light" href="/list">Listar</a>
-        </li>
         {{!-- <li class="nav-item">
-          <a class="nav-link link-light" href="/notify">Pendiente</a>
+          <a class="nav-link link-light"  href="#">Principal</a>
         </li> --}}
+        {{#if name}}
+          <li class="nav-item">
+            <a class="nav-link link-light" href="/add">Crear</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-light" href="/list">Listar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-light" href="/logout">Cerrar Sesion</a>
+          </li>
+        {{else}}
+          <li class="nav-item">
+            <a class="nav-link link-light" href="/login">Iniciar Sesion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-light" href="/login">{{name}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-light" href="/register">Registrar</a>
+          </li>
+        {{/if}}
       </ul>
     </div>
   </div>

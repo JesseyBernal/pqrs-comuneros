@@ -56,6 +56,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
 	FOREIGN KEY (id_empresa) REFERENCES empresas(id_empresa)
 );
 
+CREATE TABLE IF NOT EXISTS users (
+	email VARCHAR(255) NOT NULL PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS locales (
   id_local INT,
   id_usuario INT,

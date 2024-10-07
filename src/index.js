@@ -2,9 +2,13 @@ import exp from 'constants';
 import express, { urlencoded } from 'express'
 import { engine } from 'express-handlebars';
 import morgan from 'morgan';
-import {join, dirname} from 'path'
+import {join, dirname} from 'path';
 import { fileURLToPath } from 'url';
 import personasRoutes from './routes/personas.routes.js';
+import {body , validationResult} from 'express-validator';
+
+// import myconnection from 'express-myconnection';
+import session from 'express-session';
 
 //Inicializacion
 const app = express();
@@ -37,36 +41,12 @@ app.engine('.hbs', engine({
     extname: '.hbs'
 }));
 
-// var hbs = engine.create({
-//     helpers: {
-//         Handlebars: ( "when",function(operand_1, operator, operand_2, options) {
-//             var operators = {
-//              'eq': function(l,r) { return l == r; },
-//              'noteq': function(l,r) { return l != r; },
-//              'gt': function(l,r) { return Number(l) > Number(r); },
-//              'or': function(l,r) { return l || r; },
-//              'and': function(l,r) { return l && r; },
-//              '%': function(l,r) { return (l % r) === 0; }
-//             }
-//             , result = operators[operator](operand_1,operand_2);
-          
-//             if (result) return options.fn(this);
-//             else  return options.inverse(this);
-//           })
-//     }
-// })
 app.set('view engine', '.hbs');
 
 //Middlewares
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended:false}));
 app.use(express.json());
-
-//Routes
-app.get('/', (req, res) => {
-    res.render('index')
-})
-app.use(personasRoutes);
 
 //Public Files
 app.use(express.static(join(__dirname, 'public')));
@@ -75,5 +55,22 @@ app.use(express.static(join(__dirname, 'public')));
 app.listen(app.get('port'), ()=>
     console.log('Noah Mundo', app.get('port')));
 
+//Session
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+
+//Routes
+app.get('/', (req, res) => {
+    if(req.session.loggedin == true) {
+        res.render('index', {name: req.session.name})
+    }else{
+        res.redirect('/login')
+    }
+    
+})
+app.use(personasRoutes);
 
 

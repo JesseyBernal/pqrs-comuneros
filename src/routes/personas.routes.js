@@ -1,10 +1,79 @@
 import { Router } from "express";
 import pool from "../database.js";
 import { format } from "mysql2";
+import {/* auth *//* login, */ register, /* storeUser */} from "../controllers/LoginController.js";
+import bcrypt from 'bcrypt'
+import { isAuthenticated } from "../helpers/auth.js";
+import {body , validationResult} from 'express-validator';
 
 const router = Router();
 
-router.get('/list', async(req,res) =>{
+router.get('/register', register);
+
+router.post('/register', async(req, res) => {
+    try{
+        const {email, name, password} = req.body;
+        const newUser = { email, name, password }  
+
+        const [unico] = await pool.query('SELECT * FROM users WHERE email = ?', [newUser.email])
+        if (unico.length > 0 ) throw new Error ('Usuario ya existe') 
+            
+        const hashedPassword = await bcrypt.hash(newUser.password, 10)
+        newUser.password = hashedPassword
+        console.log(newUser)
+        await pool.query('INSERT INTO users SET ?', [newUser])
+            
+    res.redirect('/login')
+
+    }catch(err){
+        // res.status(500).json({message:err.message});
+        res.render('personas/register', { message: err.message })
+    }
+
+});
+
+
+router.get('/login', async(req, res) =>{
+    if(req.session.loggedin != true){
+        res.render('personas/login')
+    }else{
+        res.redirect('/')
+    }   
+});
+
+router.post('/login', async(req, res) => {
+    try{
+        const newUser = req.body;
+
+        const [unico] = await pool.query('SELECT * FROM users WHERE email = ?', [newUser.email])
+        
+        if (unico.length > 0 ) {
+            bcrypt.compare(newUser.password, unico[0].password, (err, isMatch) => {
+                if(!isMatch){
+                    res.render('personas/login', { err: 'Error: Contraseña incorrecta'})
+                }else{
+                    req.session.loggedin = true;
+                    req.session.name = unico[0].name;
+
+                    res.redirect('/')
+                }
+            })
+        }else{
+            res.render('personas/login', { err: 'Error: Usuario no existe'})
+        }
+    }catch(err){
+        res.status(500).json({message:err.message});
+    }
+
+});
+
+router.get('/logout', async(req, res) =>{
+    if(req.session.loggedin == true){
+        req.session.destroy()
+    }
+    res.redirect('/')
+})
+router.get('/list', isAuthenticated, async(req, res) =>{
     try{              
         
         const [resultTotal] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado ORDER BY fecha DESC;');  
@@ -12,9 +81,9 @@ router.get('/list', async(req,res) =>{
         const [contarEspera] = await pool.query('SELECT COUNT(*) AS espera FROM pqrsds WHERE id_estado = 3;')
         const cPendiente = contarPendiente[0];
         const cEspera = contarEspera[0];        
+        const prueba = {name: req.session.name}
         
-
-        res.render('personas/list', {personas: resultTotal, contarPendiente: cPendiente, contarEspera: cEspera })
+        res.render('personas/list', {personas: resultTotal, contarPendiente: cPendiente, contarEspera: cEspera, name:prueba })
     }catch(err){
         res.status(500).json({message:err.message});
         
@@ -22,7 +91,7 @@ router.get('/list', async(req,res) =>{
     }
 })
 
-router.get('/notify', async(req,res) =>{
+router.get('/notify', isAuthenticated, async(req,res) =>{
     try {
 
         const [resultTotal] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado WHERE pqrsds.id_estado = 2 ORDER BY fecha DESC;');
@@ -46,8 +115,9 @@ router.get('/notify', async(req,res) =>{
 
                 return {...persona, workDays, resDays, solDays}
             } ) 
+            const prueba = {name: req.session.name}
 
-            res.render('personas/pending', {personas: resultTotal1 })
+            res.render('personas/pending', {personas: resultTotal1, name:prueba })
 
     } catch (err) {
         res.status(500).json({message:err.message});
@@ -55,7 +125,7 @@ router.get('/notify', async(req,res) =>{
     }
 })
 
-router.post('/list-search', async(req, res) => {
+router.post('/list-search', isAuthenticated, [body('search', 'Ingrese una busqueda valida').exists().isNumeric().isLength({ max: 4 })] , async(req, res) => {
     try {
 
         const search = req.body.search       
@@ -72,15 +142,16 @@ router.post('/list-search', async(req, res) => {
         //     return {...persona, search}
 
         //     } ) 
-
-        res.render('personas/search', {personas: resultSearch, busqueda: search /* contarPendiente: cPendiente, contarEspera: cEspera */})           
+        const prueba = {name: req.session.name}
+        res.render('personas/search', {personas: resultSearch, busqueda: search, name: prueba /* contarPendiente: cPendiente, contarEspera: cEspera */})           
 
     } catch (err) {
         res.status(500).json({message:err.message});
+        // res.render('personas/list', { message: err.message })
     }
 })
 
-router.get('/list-cat/:id', async(req, res) => {  
+router.get('/list-cat/:id', isAuthenticated, async(req, res) => {  
     try{   
 
         const {id} = req.params;
@@ -91,7 +162,8 @@ router.get('/list-cat/:id', async(req, res) => {
         const [contarEspera] = await pool.query('SELECT COUNT(*) AS espera FROM pqrsds WHERE id_estado = 3;')
         const cPendiente = contarPendiente[0];
         const cEspera = contarEspera[0];
-        res.render('personas/list', {personas: resultTotal, contarPendiente: cPendiente, contarEspera: cEspera})
+        const prueba = {name: req.session.name}
+        res.render('personas/list', {personas: resultTotal, contarPendiente: cPendiente, contarEspera: cEspera, name: prueba})
 
     }catch(err){
         res.status(500).json({message:err.message});
@@ -99,7 +171,7 @@ router.get('/list-cat/:id', async(req, res) => {
 
 })
 
-router.get('/list-page', async(req, res) => {
+router.get('/list-page', isAuthenticated, async(req, res) => {
         const [users] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado ORDER BY fecha DESC;')
         
         const [contarPendiente] = await pool.query('SELECT COUNT(*) AS pendiente FROM pqrsds WHERE id_estado = 2;')
@@ -112,7 +184,7 @@ router.get('/list-page', async(req, res) => {
         const [data] = await pool.query('SELECT id_pqrsd, pqrsds.id_local AS local, nombre_administrador, nombre_usuario, nombre_categoria, nombre_estado,  fecha, asunto FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN usuarios ON locales.id_usuario = usuarios.id_usuario INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado ORDER BY fecha DESC limit ? offset ?', [+limit, +offset])
         const [totalPageData] = await pool.query ('SELECT COUNT(*) AS count FROM pqrsds')
         const totalPage = Math.ceil(+totalPageData[0]?.count / limit)
-
+        //Probando
         console.log(totalPage)
         /*
         res.json({
@@ -134,15 +206,17 @@ router.get('/list-page', async(req, res) => {
         const resultUsers = users.slice(starIndex, endIndex)
         console.log(resultUsers)
         */
-        res.render('personas/list', {personas: data, contarPendiente: cPendiente, contarEspera: cEspera})
+        const prueba = {name: req.session.name}
+        res.render('personas/list', {personas: data, contarPendiente: cPendiente, contarEspera: cEspera, name: prueba})
 
 })
 
-router.get('/add', async(req,res) =>{
+router.get('/add', isAuthenticated, async(req,res) =>{
     const [categoria] = await pool.query('SELECT id_categoria, nombre_categoria FROM categorias;');
     const [estado] = await pool.query('SELECT id_estado, nombre_estado FROM estados;');
     const [administrador] = await pool.query('SELECT id_administrador, nombre_administrador FROM administradores;');
-    res.render('personas/add', {seleccionCategoria: categoria, seleccionEstado: estado, seleccionAdministrador: administrador});
+    const prueba = {name: req.session.name}
+    res.render('personas/add', {seleccionCategoria: categoria, seleccionEstado: estado, seleccionAdministrador: administrador, name: prueba});
     
 })
 
@@ -162,7 +236,7 @@ router.post('/add', async(req,res) => {
     }
 })
 
-router.get('/details/:id' , async(req,res) =>{
+router.get('/details/:id', isAuthenticated, async(req,res) =>{
     try {
         const {id} = req.params;
 
@@ -176,14 +250,16 @@ router.get('/details/:id' , async(req,res) =>{
         const cPendiente = contarPendiente[0];
         const cEspera = contarEspera[0];        
 
-        res.render('personas/details', {persona: personaEdit, personas: result, contarPendiente: cPendiente, contarEspera: cEspera});
+        const prueba = {name: req.session.name}
+
+        res.render('personas/details', {persona: personaEdit, personas: result, contarPendiente: cPendiente, contarEspera: cEspera, name: prueba});
 
     } catch (err) {
         res.status(500).json({message:err.message});
     }
 })
 
-router.get('/edit/:id' , async(req,res) =>{
+router.get('/edit/:id' , isAuthenticated, async(req,res) =>{
     try {
         const {id} = req.params;
         const [categoria] = await pool.query('SELECT id_categoria, nombre_categoria FROM categorias;');
@@ -193,7 +269,9 @@ router.get('/edit/:id' , async(req,res) =>{
         const [persona] = await pool.query('SELECT * FROM pqrsds INNER JOIN locales ON pqrsds.id_local = locales.id_local INNER JOIN categorias ON pqrsds.id_categoria = categorias.id_categoria INNER JOIN estados ON pqrsds.id_estado = estados.id_estado INNER JOIN administradores ON pqrsds.id_administrador = administradores.id_administrador WHERE id_pqrsd = ?;', [id]);
         const personaEdit = persona[0];
 
-        res.render('personas/edit', {seleccionCategoria: categoria, seleccionEstado: estado, persona: personaEdit, seleccionAdministrador: administrador});
+        const prueba = {name: req.session.name}
+
+        res.render('personas/edit', {seleccionCategoria: categoria, seleccionEstado: estado, persona: personaEdit, seleccionAdministrador: administrador, name: prueba});
     } catch (err) {
         res.status(500).json({message:err.message});
     }
@@ -212,7 +290,7 @@ router.post('/edit/:id' , async(req,res) => {
     }
 })
 
-router.get('/delete/:id', async(req, res) =>{
+router.get('/delete/:id', isAuthenticated, async(req, res) =>{
     try {
         const {id} = req.params;
         await pool.query('DELETE FROM pqrsds WHERE id_pqrsd = ?;', [id]);

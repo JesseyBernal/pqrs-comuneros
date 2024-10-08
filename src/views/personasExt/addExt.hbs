@@ -3,19 +3,23 @@
         <div class="col-ms-4 col-md-8 col-ml-8 mx-auto">
             <div class="card text-center">
                 <div class="card-header">
-                    <h3 class="text-uppercase">CREAR NUEVO PQRSD</h3>
+                    <h3 class="text-uppercase">CREAR NUEVO PQRSD EXTERNO</h3>
                 </div>
                 <div class="card-body">
-                    <form action="/add" method="post">
+                    <form action="/addExt" method="post">
                     <div class="input-group mt-2">
                         <label for="id_pqrsd" class="input-group-text">Radicado</label>
-                        <input class="form-control" type="number" name="id_pqrsd" id="id_pqrsd" placeholder="# Radicado" autofocus required>
+                        <input class="form-control" type="number" name="id_externo" id="id_externo" placeholder="# Radicado" autofocus required>
                     </div>
                     <div class="input-group mt-2">
-                        <label for="id_local" class="input-group-text">Local</label>
-                        <input class="form-control" type="number" name="id_local" id="id_local" placeholder="Escribir Local" required>
-                    </div>                                            
-
+                        <label for="id_empresa" class="input-group-text">Empresa</label>
+                        <select class="form-select" aria-label="Default select example"  name="id_empresa" required>
+                            <option selected value="">Seleccionar Empresa</option>
+                            {{#each seleccionEmpresa}}
+                            <option value="{{id_empresa}}">{{nombre_empresa}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
                     <div class="input-group mt-2">
                         <label for="id_categoria" class="input-group-text">Categoria</label>
                         <select class="form-select" aria-label="Default select example"  name="id_categoria" required>
@@ -34,7 +38,6 @@
                             {{/each}}
                         </select>
                     </div>            
-                
                     <div class="input-group mt-2">
                         <label for="asunto" class="input-group-text">Asunto</label>
                         <textarea class="form-control" type="text" name="asunto" id="asunto" placeholder="Contendio del pqrsd" required></textarea>
@@ -46,14 +49,14 @@
                     <div class="input-group mt-2">
                         <label for="id_administrador" class="input-group-text">Creador Por</label>                        
                         <select class="form-select" aria-label="Default select example"  name="id_administrador" required>
-                            <option selected value="">Seleccionar</option>
+                            <option selected value="">Seleccionar administrador</option>
                             {{#each seleccionAdministrador}}
                             <option value="{{id_administrador}}">{{nombre_administrador}}</option>
                             {{/each}}
                         </select>
                     </div>
                     <div class="form-group mt-4 d-grid gap-2">
-                        <button class="btn btn-success">Crear PQRSD</button>
+                        <button class="btn btn-success">Crear PQRSD Externo</button>
                     </div>
                     </form>
                 </div>

@@ -38,11 +38,17 @@ CREATE TABLE IF NOT EXISTS estados_locales (
 );
 
 CREATE TABLE IF NOT EXISTS administradores (
-  id_administrador INT AUTO_INCREMENT,
+  id_administrador VARCHAR(255),
   nombre_administrador VARCHAR(255),
-  descripcion_administrador VARCHAR(255),
+	email VARCHAR(255),
+	password VARCHAR(255),
   PRIMARY KEY (id_administrador)
 );
+
+ALTER TABLE administradores ADD COLUMN email VARCHAR(255);
+ALTER TABLE administradores ADD COLUMN password VARCHAR(255);
+ALTER TABLE administradores DROP COLUMN descripcion_administrador;
+
 
 CREATE TABLE IF NOT EXISTS usuarios (
 	id_usuario INT,
@@ -56,11 +62,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 	FOREIGN KEY (id_empresa) REFERENCES empresas(id_empresa)
 );
 
-CREATE TABLE IF NOT EXISTS users (
-	email VARCHAR(255) NOT NULL PRIMARY KEY,
-	name VARCHAR(255) NOT NULL,
-	password VARCHAR(255) NOT NULL
-);
+
 
 CREATE TABLE IF NOT EXISTS locales (
   id_local INT,
@@ -85,6 +87,21 @@ CREATE TABLE IF NOT EXISTS pqrsds (
 	FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
 	FOREIGN KEY (id_estado) REFERENCES estados(id_estado),
 	FOREIGN KEY (id_local) REFERENCES locales(id_local),
+	FOREIGN KEY (id_administrador) REFERENCES administradores(id_administrador)
+);
+
+CREATE TABLE IF NOT EXISTS externo (
+	id_externo INT,
+	id_empresa INT,
+	id_categoria INT,
+	id_estado INT,
+	id_administrador INT,
+	fecha VARCHAR(255),
+	asunto TEXT,
+	PRIMARY KEY (id_externo),
+	FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
+	FOREIGN KEY (id_estado) REFERENCES estados(id_estado),
+	FOREIGN KEY (id_empresa) REFERENCES empresas(id_empresa),
 	FOREIGN KEY (id_administrador) REFERENCES administradores(id_administrador)
 );
 COMMIT;
@@ -133,6 +150,9 @@ INSERT INTO pqrsds VALUES (54, 1001, 2, 2, 1, '2024-08-22','Queja de precio');
 INSERT INTO pqrsds VALUES (987, 1002, 4, 3, 2,'2024-08-22','Sugiere horario de cierre');
 INSERT INTO pqrsds VALUES (2134, 1003, 1, 1, 1,'2024-08-22','Solicita activacion de electricidad');
 INSERT INTO pqrsds VALUES (32547, 1004, 3, 3, 2,'2024-08-22','Reclama falta de aseo');
+
+INSERT INTO externo VALUES (32547, 2, 3, 3, 2,'2024-08-22','Reclama falta de aseo');
+INSERT INTO externo VALUES (10, 2, 3, 2, 2,'2024-08-22','Reclama falta de aseo');
 
 
 UPDATE pqrsds SET id_categoria = 1 WHERE id_pqrsd = 54;

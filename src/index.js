@@ -1,10 +1,12 @@
 import exp from 'constants';
 import express, { urlencoded } from 'express'
 import { engine } from 'express-handlebars';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import {join, dirname} from 'path';
 import { fileURLToPath } from 'url';
+import personasRoutesAdmin from './routes/personasAdmin.routes.js'
 import personasRoutes from './routes/personas.routes.js';
+import personasRoutesExt from './routes/personasExt.routes.js'
 
 // import myconnection from 'express-myconnection';
 import session from 'express-session';
@@ -43,7 +45,7 @@ app.engine('.hbs', engine({
 app.set('view engine', '.hbs');
 
 //Middlewares
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(express.urlencoded({ extended:false}));
 app.use(express.json());
 
@@ -62,14 +64,20 @@ app.use(session({
 }));
 
 //Routes
-app.get('/', (req, res) => {
-    if(req.session.loggedin == true) {
-        res.render('index', {name: req.session.name})
-    }else{
-        res.redirect('/login')
-    }
+// app.get('/', (req, res) => {
+//     if(req.session.loggedin == true) {
+//         res.render('index', {name: req.session.name})
+//     }else{
+//         res.redirect('/login')
+//     }
     
+// })
+
+app.get('/', (req, res) => {
+    res.render('index')
 })
+app.use(personasRoutesAdmin);
 app.use(personasRoutes);
+app.use(personasRoutesExt);
 
 

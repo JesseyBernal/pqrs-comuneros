@@ -59,14 +59,10 @@ ALTER TABLE administradores DROP COLUMN descripcion_administrador;
 
 CREATE TABLE IF NOT EXISTS usuarios (
 	id_usuario INT,
-	id_empresa INT,
-	id_cargo INT,
 	nombre_usuario VARCHAR(255),
 	telefono_usuario VARCHAR(255),
 	correo_usuario VARCHAR(255),
-	PRIMARY KEY (id_usuario),
-	FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo),
-	FOREIGN KEY (id_empresa) REFERENCES empresas(id_empresa)
+	PRIMARY KEY (id_usuario)
 );
 
 

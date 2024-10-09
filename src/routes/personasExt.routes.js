@@ -7,7 +7,7 @@ const router = Router();
 router.get('/listExt', isAuthenticated, async(req, res) =>{
     try{              
         
-        const [resultTotal] = await pool.query('SELECT id_externo, externo.id_empresa AS empresa, nombre_empresa, nombre_administrador, nombre_categoria, nombre_estado, fecha, asunto FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado ORDER BY fecha DESC;');
+        const [resultTotal] = await pool.query('SELECT id_externo, externo.id_empresa AS empresa, nombre_empresa, nombre_administrador, nombre_categoria, nombre_estado, fecha, asunto FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado ORDER BY fecha DESC LIMIT 50;');
 
         const [contarPendiente] = await pool.query('SELECT COUNT(*) AS pendiente FROM externo WHERE id_estado = 1;')
         // const [contarEspera] = await pool.query('SELECT COUNT(*) AS espera FROM externo WHERE id_estado = 3;')
@@ -26,7 +26,7 @@ router.get('/listExt', isAuthenticated, async(req, res) =>{
 router.get('/notifyExt', isAuthenticated, async(req,res) =>{
     try {
 
-        const [resultTotal] = await pool.query('SELECT id_externo, externo.id_empresa AS empresa, nombre_empresa, nombre_administrador, nombre_categoria, nombre_estado, fecha, asunto FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado WHERE externo.id_estado = 1 ORDER BY fecha DESC;');
+        const [resultTotal] = await pool.query('SELECT id_externo, externo.id_empresa AS empresa, nombre_empresa, nombre_administrador, nombre_categoria, nombre_estado, fecha, asunto, nombre_despachado FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado INNER JOIN despachados ON externo.id_despachado = despachados.id_despachado WHERE externo.id_estado = 1 ORDER BY fecha DESC;');
 
         const resultTotal1 = resultTotal.map((persona) => {
             //Fechas
@@ -106,7 +106,7 @@ router.get('/list-pageExt', isAuthenticated, async(req, res) => {
     const [totalPageData] = await pool.query ('SELECT COUNT(*) AS count FROM externo')
     const totalPage = Math.ceil(+totalPageData[0]?.count / limit)
     //Probando
-    console.log(totalPage)
+    // console.log(totalPage)
     const prueba = {name: req.session.name}
     res.render('personasExt/listExt', {personas: data, contarPendiente: cPendiente, /* contarEspera: cEspera, */ name: prueba})
 
@@ -115,19 +115,41 @@ router.get('/list-pageExt', isAuthenticated, async(req, res) => {
 router.get('/addExt', isAuthenticated, async(req,res) =>{
     const [categoria] = await pool.query('SELECT id_categoria, nombre_categoria FROM categorias;');
     const [estado] = await pool.query('SELECT id_estado, nombre_estado FROM estados;');
+    const [despachado] = await pool.query('SELECT id_despachado, nombre_despachado FROM despachados;');
     const [administrador] = await pool.query('SELECT id_administrador, nombre_administrador FROM administradores WHERE id_administrador = ?;', [req.session.id_admin]);
     const [empresa] = await pool.query('SELECT id_empresa, nombre_empresa FROM empresas;');
     const prueba = {name: req.session.name}
-    res.render('personasExt/addExt', {seleccionCategoria: categoria, seleccionEstado: estado, seleccionAdministrador: administrador, seleccionEmpresa: empresa, name: prueba});
+    res.render('personasExt/addExt', {seleccionCategoria: categoria, seleccionEstado: estado, seleccionAdministrador: administrador, seleccionEmpresa: empresa, seleccionDespachado: despachado, name: prueba});
     
 })
 
 router.post('/addExt', async(req,res) => {
     try{
-        const {id_externo, id_empresa, id_categoria, id_estado,  asunto, fecha, id_administrador} = req.body;
-        const newPqrsd = { id_externo, id_empresa, id_categoria, id_estado,  asunto, fecha, id_administrador }        
+        const {id_externo, id_empresa, id_categoria, id_estado,  asunto, fecha, id_administrador, id_despachado} = req.body;
+        const newPqrsd = { id_externo, id_empresa, id_categoria, id_estado,  asunto, fecha, id_administrador, id_despachado }        
         await pool.query('INSERT INTO externo SET ?', [newPqrsd]);
         res.redirect('/listExt')   
+    }catch(err){
+        res.status(500).json({message:err.message});
+    }
+})
+
+router.get('/addUserExt', isAuthenticated, async(req,res) =>{
+    
+    const prueba = {name: req.session.name}
+    res.render('personasExt/addUserExt', { name: prueba});
+    
+})
+
+router.post('/addUserExt', async(req,res) => {
+    try{
+        const { nombre_empresa, descripcion_empresa, telefono_empresa, correo_empresa } = req.body;
+        const newPqrsd = { nombre_empresa, descripcion_empresa, telefono_empresa, correo_empresa }        
+
+        await pool.query('INSERT INTO empresas SET ?', [newPqrsd]);
+        res.redirect('/listExt')   
+        
+
     }catch(err){
         res.status(500).json({message:err.message});
     }
@@ -140,7 +162,7 @@ router.get('/detailsExt/:id', isAuthenticated, async(req,res) =>{
         const [persona] = await pool.query('SELECT id_empresa as empresa, nombre_empresa, descripcion_empresa, telefono_empresa, correo_empresa FROM empresas WHERE id_empresa = ?;', [id]);
         const personaEdit = persona[0];
 
-        const [result] = await pool.query('SELECT id_externo, externo.id_empresa AS empresa, nombre_empresa, nombre_administrador, nombre_categoria, nombre_estado, fecha, asunto FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado WHERE externo.id_empresa = ?;', [id]);
+        const [result] = await pool.query('SELECT id_externo, externo.id_empresa AS empresa, nombre_empresa, nombre_administrador, nombre_categoria, nombre_estado, fecha, asunto, nombre_despachado FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado INNER JOIN despachados ON externo.id_despachado = despachados.id_despachado WHERE externo.id_empresa = ? LIMIT 50;', [id]);
 
         const [contarPendiente] = await pool.query('SELECT COUNT(*) AS pendiente FROM externo WHERE id_estado = 1 AND id_empresa = ?;', [id])
         // const [contarEspera] = await pool.query('SELECT COUNT(*) AS espera FROM externo WHERE id_estado = 3 AND id_empresa = ?;', [id])
@@ -156,20 +178,48 @@ router.get('/detailsExt/:id', isAuthenticated, async(req,res) =>{
     }
 })
 
+router.get('/detailsEditUserExt/:id',isAuthenticated, async(req,res) =>{
+    const {id} = req.params;
+
+    const [empresa] = await pool.query('SELECT id_empresa, nombre_empresa FROM empresas;');
+    const [persona] = await pool.query('SELECT id_empresa AS empresa, nombre_empresa, telefono_empresa, correo_empresa, descripcion_empresa FROM empresas WHERE id_empresa = ?;', [id]);
+    const personaEdit = persona[0];
+    const prueba = {name: req.session.name}
+
+    res.render('personasExt/detailsEditUserExt', {persona: personaEdit, seleccionEmpresa:empresa, name: prueba});
+
+})
+
+
+router.post('/detailsEditUserExt/:id',isAuthenticated, async(req,res) => {
+    try {
+        const {id} = req.params;
+        const { telefono_empresa, correo_empresa, descripcion_empresa } = req.body;        
+        const editPersona = { telefono_empresa, correo_empresa, descripcion_empresa };
+        await pool.query('UPDATE empresas SET ? WHERE id_empresa = ?;', [editPersona, id]);
+
+
+        res.redirect('/listExt');
+    } catch (err) {
+        res.status(500).json({message:err.message});
+    }
+})
+
 router.get('/editExt/:id' , isAuthenticated, async(req,res) =>{
     try {
         const {id} = req.params;
         const [categoria] = await pool.query('SELECT id_categoria, nombre_categoria FROM categorias;');
         const [estado] = await pool.query('SELECT id_estado, nombre_estado FROM estados;');
+        const [despachado] = await pool.query('SELECT id_despachado, nombre_despachado FROM despachados;');
         const [administrador] = await pool.query('SELECT id_administrador, nombre_administrador FROM administradores WHERE id_administrador = ?;',[req.session.id_admin]);
         const [empresa] = await pool.query('SELECT id_empresa, nombre_empresa FROM empresas;');
 
-        const [persona] = await pool.query('SELECT * FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador WHERE id_externo = ?;', [id]);
+        const [persona] = await pool.query('SELECT * FROM externo INNER JOIN empresas ON externo.id_empresa = empresas.id_empresa INNER JOIN categorias ON externo.id_categoria = categorias.id_categoria INNER JOIN estados ON externo.id_estado = estados.id_estado INNER JOIN administradores ON externo.id_administrador = administradores.id_administrador INNER JOIN despachados ON externo.id_despachado = despachados.id_despachado WHERE id_externo = ?;', [id]);
         const personaEdit = persona[0];
 
         const prueba = {name: req.session.name}
 
-        res.render('personasExt/editExt', {seleccionCategoria: categoria, seleccionEstado: estado, persona: personaEdit, seleccionAdministrador: administrador, seleccionEmpresa: empresa, name: prueba});
+        res.render('personasExt/editExt', {seleccionCategoria: categoria, seleccionEstado: estado, persona: personaEdit, seleccionAdministrador: administrador, seleccionEmpresa: empresa, seleccionDespachado: despachado, name: prueba});
     } catch (err) {
         res.status(500).json({message:err.message});
     }
@@ -178,8 +228,8 @@ router.get('/editExt/:id' , isAuthenticated, async(req,res) =>{
 router.post('/editExt/:id' , async(req,res) => {
     try {
         const {id} = req.params;
-        const {id_externo, id_empresa, id_categoria, id_estado, asunto, fecha, id_administrador} = req.body;        
-        const editPersona = {id_externo, id_empresa, id_categoria, id_estado, asunto, fecha, id_administrador};
+        const {id_externo, id_empresa, id_categoria, id_estado, asunto, fecha, id_administrador, id_despachado} = req.body;        
+        const editPersona = {id_externo, id_empresa, id_categoria, id_estado, asunto, fecha, id_administrador, id_despachado};
         await pool.query('UPDATE externo SET ? WHERE id_externo = ?;', [editPersona, id]);
 
         res.redirect('/listExt');

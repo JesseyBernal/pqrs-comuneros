@@ -54,7 +54,16 @@
                             <option value="{{id_administrador}}">{{nombre_administrador}}</option>
                             {{/each}}
                         </select>
-                    </div>                    
+                    </div> 
+                    <div class="input-group mt-2">
+                        <label for="id_despachado" class="input-group-text">Despachado</label>                        
+                        <select class="form-select" aria-label="Default select example"  name="id_despachado" required>
+                            <option selected hidden value="{{persona.id_despachado}}">{{persona.nombre_despachado}}</option>
+                            {{#each seleccionDespachado}}
+                            <option value="{{id_despachado}}">{{nombre_despachado}}</option>
+                            {{/each}}
+                        </select>
+                    </div> 
                     <div class="form-group mt-4 d-grid gap-2">
                         <button class="btn btn-success">Actualizar PQRSD Externo</button>
                     </div>

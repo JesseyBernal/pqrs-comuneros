@@ -23,6 +23,7 @@
               <td scope="col">Dias restantes</td>              
               <td scope="col">Asunto</td>
               <td scope="col">Fecha</td>
+              <td scope="col">Despachado</td>
               <td scope="col">Registrado</td>              
               <td scope="col">Acciones</td>
             </tr>
@@ -40,6 +41,7 @@
                 {{/when}}
                 <td>{{asunto}}</td>
                 <td>{{fecha}}</td>
+                <td>{{nombre_despachado}}</td>      
                 <td>{{nombre_administrador}}</td>      
                 <td>
                   <div class="btn-group">
@@ -54,7 +56,7 @@
           </tbody>
           <tfoot>
             <tr class="table-dark">
-              <td colspan="9">PQRSD EXTERNOS PENDIENTES</td>
+              <td colspan="10">PQRSD EXTERNOS PENDIENTES</td>
             </tr>
         </table>        
     </div>
@@ -66,7 +68,7 @@
         </div>
         <div class="card-body">
           <p>Crea un PQRSD EXTERNO pendiente haciendo click en el botón</p>
-          <a href="/add" class="btn btn-primary">Crear</a>
+          <a href="/addExt" class="btn btn-primary">Crear</a>
         </div>   
         </div>   
     {{/if}}  

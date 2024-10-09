@@ -4,8 +4,7 @@
     {{#when contarPendiente.pendiente 'plus' 1}}
     <div class="position-relative">
       <div class="position-absolute top-0 end-0">
-        <a href="/notify" class="btn btn-primary stretched-link" style="color: rgb(240, 240, 240);">Penidientes</a> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"> {{contarPendiente.pendiente}} <span class="visually-hidden">Sin resolver</span></span> {{!-- <button type="button" class="btn btn-info position-relative"> --}} 
-        {{!-- </button> --}}
+        <a href="/notify" class="btn btn-primary stretched-link" style="color: rgb(240, 240, 240);">Penidientes</a> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"> {{contarPendiente.pendiente}} <span class="visually-hidden">Sin resolver</span></span> 
       </div>
     </div>
     {{/when}}
@@ -22,6 +21,21 @@
             </div>
           </div>
         </form>
+      </div>
+      <div class="p-2 flex-grow-1 bd-highlight align-items-center ">
+        <form action="/list-searchUser" method="post">
+          <div class="input-group mb-2">
+            <input type="text" class="form-control" placeholder="Usuario..." id="search" name="search" required/>
+            <div class="input-group-btn">
+              <button class="btn btn-outline-success" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="p-2 bd-highlight align-items-center">
+        <a class="btn btn-success" href="/addUser" role="button">Crear Usuario</a>      
       </div>
       <div class="p-2 bd-highlight align-items-center">
         <a class="btn btn-success" href="/add" role="button">Crear PQRSD</a>      
@@ -48,7 +62,7 @@
               <tr>
                 <td>{{id_pqrsd}}</td>
                 <td><a href="/details/{{local}}">{{local}}</a></td>
-                <td>{{nombre_usuario}}</td>
+                <td><a href="/detailsEditUser/{{usuario}}">{{nombre_usuario}}</a></td>
                 <td>{{nombre_categoria}}</td>
                 <td>{{nombre_estado}}</td>                
                 <td>{{asunto}}</td>

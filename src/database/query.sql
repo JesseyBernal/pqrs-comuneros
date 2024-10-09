@@ -30,6 +30,13 @@ CREATE TABLE IF NOT EXISTS estados (
 	PRIMARY KEY (id_estado)
 );
 
+//TODO
+CREATE TABLE IF NOT EXISTS despachados (
+	id_despachado INT AUTO_INCREMENT,
+	nombre_despachado VARCHAR(255),
+	PRIMARY KEY (id_despachado)
+);
+
 CREATE TABLE IF NOT EXISTS estados_locales (
   id_estado_local INT AUTO_INCREMENT,
   nombre_estado VARCHAR(255),
@@ -81,6 +88,7 @@ CREATE TABLE IF NOT EXISTS pqrsds (
 	id_categoria INT,
 	id_estado INT,
 	id_administrador INT,
+	id_despachado INT,
 	fecha VARCHAR(255),
 	asunto TEXT,
 	PRIMARY KEY (id_pqrsd),
@@ -88,6 +96,7 @@ CREATE TABLE IF NOT EXISTS pqrsds (
 	FOREIGN KEY (id_estado) REFERENCES estados(id_estado),
 	FOREIGN KEY (id_local) REFERENCES locales(id_local),
 	FOREIGN KEY (id_administrador) REFERENCES administradores(id_administrador)
+	FOREIGN KEY (id_despachado) REFERENCES despachados(id_despachado)
 );
 
 CREATE TABLE IF NOT EXISTS externo (
@@ -96,6 +105,7 @@ CREATE TABLE IF NOT EXISTS externo (
 	id_categoria INT,
 	id_estado INT,
 	id_administrador INT,
+	id_despachado INT,
 	fecha VARCHAR(255),
 	asunto TEXT,
 	PRIMARY KEY (id_externo),
@@ -103,6 +113,7 @@ CREATE TABLE IF NOT EXISTS externo (
 	FOREIGN KEY (id_estado) REFERENCES estados(id_estado),
 	FOREIGN KEY (id_empresa) REFERENCES empresas(id_empresa),
 	FOREIGN KEY (id_administrador) REFERENCES administradores(id_administrador)
+	FOREIGN KEY (id_despachado) REFERENCES despachados(id_despachado)
 );
 COMMIT;
 
@@ -154,6 +165,10 @@ INSERT INTO pqrsds VALUES (32547, 1004, 3, 3, 2,'2024-08-22','Reclama falta de a
 INSERT INTO externo VALUES (32547, 2, 3, 3, 2,'2024-08-22','Reclama falta de aseo');
 INSERT INTO externo VALUES (10, 2, 3, 2, 2,'2024-08-22','Reclama falta de aseo');
 
+INSERT INTO despachados VALUES (1, 'No despachado');
+INSERT INTO despachados VALUES (2, 'Despachado Fisico');
+INSERT INTO despachados VALUES (3, 'Despachado Digital');
+INSERT INTO despachados VALUES (4, 'Despachado Fisico y Digital');
 
 UPDATE pqrsds SET id_categoria = 1 WHERE id_pqrsd = 54;
 

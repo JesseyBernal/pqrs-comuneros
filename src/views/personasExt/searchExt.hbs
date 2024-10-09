@@ -1,9 +1,9 @@
 <div class="container p-0">
   <div class="row mt-2">
     <h3 class="text-center text-uppercase p-2" >Resultado de busqueda de: {{busqueda}}</h3>   
-    <form action="/list-search" method="post">
+    <form action="/list-searchExt" method="post">
       <div class="input-group mb-2">
-        <input type="number" class="form-control" placeholder="Local..." id="search" name="search"  required/>
+        <input type="text" class="form-control" placeholder="Empresa..." id="search" name="search"  required/>
         <div class="input-group-btn">
           <button class="btn btn-outline-success" type="submit">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -51,10 +51,8 @@
               <td colspan="9">LOCAL {{busqueda}}</td>
             </tr>
           </tfoot>          
-          {{!-- <h3 class="form-text text-muted" >Cantidad de PQRSD pendientes: <a href="/list-search/cat/:id/{{rTotal.local}}">{{contarPendiente.pendiente}} </a> Cantidad de PQRSD en espera: <a href="/list-search/cat/:id/{{rTotal.local}} ">{{contarEspera.espera}}</a> </h3>           --}}
         </table>        
     </div>
-    {{!-- {{>pagination}} --}}
     {{else}}
       <div class="card text-center mx-auto p-0" style="width: 350px;">
         <div class="card-header">
@@ -63,7 +61,7 @@
         <div class="card-body">
           <p>Presiona este boton para que puedas registrar un PQRSD en la
             pagina</p>
-          <a href="/add" class="btn btn-primary">Crear</a>
+          <a href="/addExt" class="btn btn-primary">Crear</a>
         </div>   
         </div>   
     {{/if}}  

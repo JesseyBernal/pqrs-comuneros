@@ -4,22 +4,29 @@
     {{#when contarPendiente.pendiente 'plus' 1}}
     <div class="position-relative">
       <div class="position-absolute top-0 end-0">
-        <a href="/notifyExt" class="btn btn-primary stretched-link" style="color: rgb(240, 240, 240);">Penidientes</a> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"> {{contarPendiente.pendiente}} <span class="visually-hidden">Sin resolver</span></span> {{!-- <button type="button" class="btn btn-info position-relative"> --}} 
+        <a href="/notifyExt" class="btn btn-primary stretched-link" style="color: rgb(240, 240, 240);">Penidientes</a> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"> {{contarPendiente.pendiente}} </span> {{!-- <button type="button" class="btn btn-info position-relative"> --}} 
         {{!-- </button> --}}
       </div>
     </div>
     {{/when}}
     <h3 class="text-center text-uppercase p-2">Lista de PQRSD EXTERNOS</h3>
-    <form action="/list-searchExt" method="post">
-      <div class="input-group mb-2">
-        <input type="text" class="form-control" placeholder="Empresa..." id="search" name="search" required/>
-        <div class="input-group-btn">
-          <button class="btn btn-outline-success" type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
+    <div class="d-flex bd-highlight p-0">
+      <div class="p-2 flex-grow-1 bd-highlight align-items-center ">
+        <form action="/list-search" method="post">
+          <div class="input-group mb-2">
+            <input type="number" class="form-control" placeholder="Local..." id="search" name="search" required/>
+            <div class="input-group-btn">
+              <button class="btn btn-outline-success" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
+      <div class="p-2 bd-highlight align-items-center">
+        <a class="btn btn-success" href="/addExt" role="button">Crear PQRSD</a>      
+      </div>
+    </div> 
     {{/if }}
     {{#if personas}}   
         <table class="table text-center align-middle table-striped rounded-3 overflow-hidden">
@@ -61,9 +68,9 @@
               <td colspan="9">REGISTRO DE PQRSD EXTERNOS</td>
             </tr>
           </tfoot>    
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between p-0">
             <div class="d-flex align-items-center">
-              <h6 class="text-muted m-0">Cantidad de PQRSD Externos pendientes: <a href="/list-catExt/2 ">{{contarPendiente.pendiente}} </a> Cantidad de PQRSD Externos en espera: <a href="/list-catExt/3 ">{{contarEspera.espera}}</a> </h6>  
+              <h6 class="text-muted m-0">Cantidad de PQRSD Externos pendientes: <a href="/list-catExt/1 ">{{contarPendiente.pendiente}} </a>
             </div>
             <div class="d-flex align-items-center">
               {{>paginationExt}}        
@@ -78,7 +85,7 @@
         </div>
         <div class="card-body">
           <p>Crea un PQRSD haciendo click en el botón</p>
-          <a href="/add" class="btn btn-primary">Crear</a>
+          <a href="/addExt" class="btn btn-primary">Crear</a>
         </div>   
         </div>   
     {{/if}}  

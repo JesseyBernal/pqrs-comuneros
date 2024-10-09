@@ -9,18 +9,24 @@
       </div>
     </div>
     {{/when}}
-
     <h3 class="text-center text-uppercase p-2">Lista de PQRSD</h3>
-    <form action="/list-search" method="post">
-      <div class="input-group mb-2">
-        <input type="number" class="form-control" placeholder="Local..." id="search" name="search" required/>
-        <div class="input-group-btn">
-          <button class="btn btn-outline-success" type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
+    <div class="d-flex bd-highlight p-0">
+      <div class="p-2 flex-grow-1 bd-highlight align-items-center ">
+        <form action="/list-search" method="post">
+          <div class="input-group mb-2">
+            <input type="number" class="form-control" placeholder="Local..." id="search" name="search" required/>
+            <div class="input-group-btn">
+              <button class="btn btn-outline-success" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
+      <div class="p-2 bd-highlight align-items-center">
+        <a class="btn btn-success" href="/add" role="button">Crear PQRSD</a>      
+      </div>
+    </div> 
     {{/if }}
     {{#if personas}}   
         <table class="table text-center align-middle table-striped rounded-3 overflow-hidden">
@@ -64,9 +70,9 @@
               <td colspan="9">REGISTRO DE PQRSD</td>
             </tr>
           </tfoot>    
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between p-0">
             <div class="d-flex align-items-center">
-              <h6 class="text-muted m-0">Cantidad de PQRSD pendientes: <a href="/list-cat/2 ">{{contarPendiente.pendiente}} </a> Cantidad de PQRSD en espera: <a href="/list-cat/3 ">{{contarEspera.espera}}</a> </h6>  
+              <h6 class="text-muted m-0">Cantidad de PQRSD pendientes: <a href="/list-cat/1 ">{{contarPendiente.pendiente}} </a> 
             </div>
             <div class="d-flex align-items-center">
               {{>pagination}}        

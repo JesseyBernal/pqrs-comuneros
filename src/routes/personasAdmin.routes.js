@@ -6,15 +6,15 @@ import bcrypt from 'bcrypt'
 const router = Router();
 
 router.get('/register', async(req, res) => {
-  try {
+try {
     if(req.session.loggedin != true){
-      res.render('personasAdmin/register');
+    res.render('personasAdmin/register');
     }else{
-      res.redirect('/')
-  } 
-  } catch (err) {
+    res.redirect('/')
+} 
+} catch (err) {
     res.render('personasAdmin/register', { message: err.message })
-  }
+}
 });
 
 router.post('/register', async(req, res) => {

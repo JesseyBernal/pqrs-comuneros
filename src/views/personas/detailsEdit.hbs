@@ -28,6 +28,9 @@
                         <label for="" class="input-group-text">Descripcion</label>
                         <input class="form-control" type="text" name="descripcion_local" id="descripcion_local" placeholder="Descripcion Local" value="{{persona.descripcion_local}}" required>
                     </div>
+                    {{#if message}}
+                        <p class="m-2" style="color: red;">{{message}}</p>
+                    {{/if}}
                     <div class="form-group mt-4 d-grid gap-2">
                         <button class="btn btn-success">Actualizar</button>
                     </div>

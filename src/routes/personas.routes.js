@@ -198,12 +198,18 @@ router.post('/addUser', async(req,res) => {
         const {id_usuario, nombre_usuario, telefono_usuario, correo_usuario} = req.body;
         const newPqrsd = { id_usuario, nombre_usuario, telefono_usuario, correo_usuario }        
 
+        const [unico] = await pool.query('SELECT * FROM usuarios WHERE id_usuario = ?', [newPqrsd.id_usuario])
+        if (unico.length > 0 ) throw new Error ('Usuario ya existe')
+
         await pool.query('INSERT INTO usuarios SET ?', [newPqrsd]);
+
+
         res.redirect('/list')   
         
 
     }catch(err){
-        res.status(500).json({message:err.message});
+        // res.status(500).json({message:err.message});
+        res.render('personas/AddUser', { message: err.message })
     }
 })
 
@@ -247,12 +253,17 @@ router.post('/detailsEdit/:id',isAuthenticated, async(req,res) => {
         const {id} = req.params;
         const {id_estado_local, id_usuario, nombre_local, descripcion_local} = req.body;        
         const editPersona = {id_estado_local, id_usuario, nombre_local, descripcion_local};
+
+        const [unico] = await pool.query('SELECT * FROM usuarios WHERE id_usuario = ?', [editPersona.id_usuario])
+        if (unico.length == 0 ) throw new Error ('Usuario no existe')
+
         await pool.query('UPDATE locales SET ? WHERE id_local = ?;', [editPersona, id]);
         
         
         res.redirect('/list');
     } catch (err) {
         res.status(500).json({message:err.message});
+        
     }
 })
 
@@ -273,6 +284,7 @@ router.post('/detailsEditUser/:id',isAuthenticated, async(req,res) => {
         const {id} = req.params;
         const { nombre_usuario, telefono_usuario, correo_usuario } = req.body;        
         const editPersona = { nombre_usuario, telefono_usuario, correo_usuario };
+
         await pool.query('UPDATE usuarios SET ? WHERE id_usuario = ?;', [editPersona, id]);
 
 
